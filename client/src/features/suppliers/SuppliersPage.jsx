@@ -1,0 +1,6 @@
+import { Truck } from 'lucide-react'
+import ResourceManager from '../../components/ResourceManager'
+import { stockroomApi } from '../../services/api'
+
+const fields=[{name:'name',label:'Supplier name',maxLength:160},{name:'contactName',label:'Contact name',required:false},{name:'contactEmail',label:'Contact email',type:'email',required:false},{name:'phone',label:'Phone',required:false},{name:'leadTimeDays',label:'Lead time (days)',type:'number',min:0,defaultValue:0}]
+export default function SuppliersPage({canManage=true}){return <ResourceManager canManage={canManage} title="Suppliers" eyebrow="PARTNERS" description="Manage supplier details, availability and lead times." icon={Truck} columns={['Supplier','Contact','Products','Lead time','Status']} load={stockroomApi.suppliers.list} create={stockroomApi.suppliers.create} update={stockroomApi.suppliers.update} fields={fields} toRow={item=>[item.name,item.contactEmail||item.phone||'—',item.productCount??0,`${item.leadTimeDays??0} days`,item.status]} actions={[{label:'Deactivate',show:item=>item.status==='Active',run:item=>stockroomApi.suppliers.remove(item.id)},{label:'Reactivate',show:item=>item.status==='Inactive',run:item=>stockroomApi.suppliers.update(item.id,{status:'ACTIVE'})}]}/>}
