@@ -19,3 +19,18 @@
 
 .report-chart-panel{margin-top:12px;min-height:275px}.report-chart-wrap{height:220px;width:100%;margin-top:12px}.report-chart-empty{min-height:220px;display:grid;place-items:center;color:var(--muted);font-size:10px}.resource-controls{display:flex;gap:8px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border)}.resource-controls .table-search{width:min(260px,100%)}.purchase-line-editor{display:grid;gap:7px}.purchase-line-row{display:grid;grid-template-columns:minmax(170px,1fr) 85px 105px 32px;gap:6px}.purchase-line-row input,.purchase-line-row select{min-width:0}.row-actions{display:flex;gap:5px;align-items:center}.notification-read-toggle{margin-left:auto}.product-inactive{opacity:.62}
 @media(max-width:650px){.resource-controls{align-items:stretch;flex-direction:column}.resource-controls .table-search{width:100%}.purchase-line-row{grid-template-columns:minmax(0,1fr) 62px 82px 30px}.report-chart-wrap{height:190px}.report-actions{flex-wrap:wrap}.sample-period{width:100%}}
+ .report-date-filter{display:inline-flex;align-items:center;gap:5px;height:31px;padding:0 8px;border:1px solid var(--border);border-radius:7px;color:var(--muted);font-size:9px}
+.report-date-filter input{width:118px;border:0;background:transparent;color:var(--text);font:inherit;outline-color:var(--accent)}
+.profile-settings{margin-bottom:10px;padding:16px}
+.settings-panel-heading{display:flex;align-items:center;gap:11px}
+.settings-panel-heading strong{font-size:11px}
+.settings-panel-heading p{margin:4px 0 0;color:var(--muted);font-size:9px}
+.profile-form{display:grid;grid-template-columns:1fr 1fr;align-items:end;gap:12px;margin-top:16px}
+.profile-form label{display:grid;gap:5px;color:var(--muted);font-size:10px}
+.profile-form input{height:34px;padding:0 9px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:11px}
+.profile-form input[readonly]{opacity:.72}
+.profile-form small{font-size:9px}
+.profile-form .data-error,.profile-success{grid-column:1/-1;margin:0}
+.profile-success{font-size:10px;color:var(--green)}
+.profile-form .button{justify-self:start}
+@media(max-width:650px){.profile-form{grid-template-columns:1fr}.report-date-filter{flex:1;justify-content:space-between}.report-date-filter input{width:120px}}

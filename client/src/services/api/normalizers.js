@@ -2,9 +2,10 @@
 export function toProductView(product) {
   const stock = product.stock || {}
   const amount = product.unitPrice?.amount ?? product.price ?? 0
-  const onHand = product.available ?? stock.available ?? stock.onHand ?? product.stockOnHand ?? product.stock ?? 0
+  const onHand = product.onHand ?? stock.onHand ?? product.stockOnHand ?? product.stock ?? product.available ?? stock.available ?? 0
+  const available = product.available ?? stock.available ?? onHand
   const reorderPoint = stock.reorderPoint ?? product.reorderPoint ?? 0
-  const status = product.isActive===false||product.isActive===0 ? 'Inactive' : onHand <= 0 ? 'Out of stock' : onHand <= reorderPoint ? 'Low stock' : 'In stock'
+  const status = product.isActive===false||product.isActive===0 ? 'Inactive' : available <= 0 ? 'Out of stock' : available <= reorderPoint ? 'Low stock' : 'In stock'
   const name = product.name || ''
   return {
     id: product.id,
@@ -14,7 +15,8 @@ export function toProductView(product) {
     categoryId: product.category?.id || product.categoryId || null,
     supplierId: product.supplier?.id || product.supplierId || product.supplier_id || null,
     supplier: product.supplier?.name || product.supplierName || '',
-    stock: Number(onHand),
+    stock: Number(available),
+    onHand: Number(onHand),
     price: Number(amount),
     currency: product.unitPrice?.currency || product.currency || 'INR',
     isActive:product.isActive!==false&&product.isActive!==0,
@@ -30,7 +32,7 @@ export function toRows(records, keys) {
 }
 
 export function toCategoryView(category) {
-  return { id: category.id, name: category.name, active: category.active ?? category.isActive ?? true }
+  return { id: category.id, name: category.name, parentId:category.parentId||category.parent_id||null, parentName:category.parentName||category.parent_name||'', active: category.active ?? category.isActive ?? true }
 }
 
 function titleCaseStatus(value) {

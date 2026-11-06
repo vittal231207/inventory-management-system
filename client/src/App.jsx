@@ -116,6 +116,7 @@ export default function App() {
     setEditingProduct(null)
     flash(dataMode === 'sample' ? 'Product saved to this sample session.' : 'Product saved.')
   }
+  async function refreshCategories(){const result=await stockroomApi.categories.list({page:1,pageSize:1000});setCategories(result.items)}
   const changeQuery=value=>{setQuery(value);setProductPage(1)}
   const changeFilter=value=>{setFilter(value);setProductPage(1)}
   const changeCategory=value=>{setCategory(value);setProductPage(1)}
@@ -147,13 +148,13 @@ export default function App() {
       <div className="page-content"><Suspense fallback={<LoadingPage/>}>
         <Routes>
           <Route path="/" element={<Dashboard products={products} dateRange={dateRange} setDateRange={setDateRange} flash={flash} onNavigate={navigate} canManage={canManage} userName={apiUser?.name||'Vittal'} onAddProduct={() => {setEditingProduct(null);setShowProductForm(true)}}/>} />
-          <Route path="/inventory" element={<AccessRoute roles={['administrator','inventory_manager','analyst']} user={apiUser}><Inventory canManage={canManage} query={query} setQuery={changeQuery} filter={filter} setFilter={changeFilter} category={category} setCategory={changeCategory} products={products} allProducts={products} productTotal={productTotal} productPage={productPage} productPages={productPages} onPageChange={setProductPage} categories={categories} focusSearchRequest={searchFocusRequest} onAddProduct={() => {setEditingProduct(null);setShowProductForm(true)}} onEditProduct={product=>{setEditingProduct(product);setShowProductForm(true)}} onDeleteProduct={deactivateProduct} onActivateProduct={activateProduct}/></AccessRoute>} />
+          <Route path="/inventory" element={<AccessRoute roles={['administrator','inventory_manager','analyst']} user={apiUser}><Inventory canManage={canManage} query={query} setQuery={changeQuery} filter={filter} setFilter={changeFilter} category={category} setCategory={changeCategory} products={products} allProducts={products} productTotal={productTotal} productPage={productPage} productPages={productPages} onPageChange={setProductPage} categories={categories} onCategoriesChanged={refreshCategories} focusSearchRequest={searchFocusRequest} onAddProduct={() => {setEditingProduct(null);setShowProductForm(true)}} onEditProduct={product=>{setEditingProduct(product);setShowProductForm(true)}} onDeleteProduct={deactivateProduct} onActivateProduct={activateProduct}/></AccessRoute>} />
           <Route path="/stock" element={<AccessRoute roles={['administrator','inventory_manager','analyst']} user={apiUser}><StockMovementsPage canManage={canManage}/></AccessRoute>} />
           <Route path="/purchases" element={<AccessRoute roles={['administrator','inventory_manager','analyst']} user={apiUser}><PurchasesPage canManage={canManage}/></AccessRoute>} />
           <Route path="/suppliers" element={<AccessRoute roles={['administrator','inventory_manager','analyst']} user={apiUser}><SuppliersPage canManage={canManage}/></AccessRoute>} />
           <Route path="/reports" element={<Reports/>} />
           <Route path="/team" element={<AccessRoute roles={['administrator']} user={apiUser}><TeamPage canManage={canAdmin}/></AccessRoute>} />
-          <Route path="/settings" element={<AccessRoute roles={['administrator','inventory_manager','analyst']} user={apiUser}><SettingsPage theme={theme} toggleTheme={toggleTheme}/></AccessRoute>} />
+          <Route path="/settings" element={<AccessRoute roles={['administrator','inventory_manager','analyst']} user={apiUser}><SettingsPage theme={theme} toggleTheme={toggleTheme} user={apiUser} canAdmin={canAdmin} onProfileSaved={name=>setApiUser(current=>({...current,name}))}/></AccessRoute>} />
           <Route path="*" element={<NotFound onBack={() => navigate('/')}/>} />
         </Routes>
       </Suspense></div>
