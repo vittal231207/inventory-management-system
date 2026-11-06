@@ -13,8 +13,7 @@ export default function Reports() {
   const [to,setTo]=useState('')
   const loadReport = useCallback(() => stockroomApi.reports.getInventorySummary({ range, ...(from?{from}:{}), ...(to?{to}:{}) }), [range,from,to])
   const { data, loading, error } = useApiQuery(loadReport, [loadReport])
-  const loadMovements=useCallback(()=>data?.range?.from&&data?.range?.to?stockroomApi.stockMovements.list({from:data.range.from,to:data.range.to,page:1,pageSize:1000}):Promise.resolve({items:[],total:0}),[data?.range?.from,data?.range?.to])
-  const {data:movementPage,loading:movementsLoading,error:movementError}=useApiQuery(loadMovements,[loadMovements])
+  const {data:movementPage,loading:movementsLoading,error:movementError}=useApiQuery(()=>data?.range?.from&&data?.range?.to?stockroomApi.stockMovements.list({from:data.range.from,to:data.range.to,page:1,pageSize:1000}):Promise.resolve({items:[],total:0}),[data?.range?.from,data?.range?.to])
   if (error) return <section className="panel data-error" role="alert">Reports could not be loaded: {error.message}</section>
   async function exportReport(format) { setExportError('');try{await stockroomApi.reports.download(format, { range, ...(from?{from}:{}), ...(to?{to}:{}) })}catch(e){setExportError(e.message)} }
   const invalidDates=Boolean(from&&to&&from>to)
