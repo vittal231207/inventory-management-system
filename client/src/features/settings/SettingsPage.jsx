@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronDown, Moon, ShieldCheck, Sun, UserRound } from 'lucide-react'
 import { stockroomApi, dataMode } from '../../services/api'
@@ -8,7 +8,6 @@ export default function SettingsPage({theme,toggleTheme,user,onProfileSaved,canA
   const [saving,setSaving]=useState(false)
   const [notice,setNotice]=useState('')
   const [error,setError]=useState('')
-  useEffect(()=>setName(user?.name||'Vittal'),[user?.name])
   async function saveProfile(event){event.preventDefault();setError('');setNotice('');setSaving(true);try{const result=await stockroomApi.auth.updateProfile({name:name.trim()});onProfileSaved?.(result.name);setNotice('Profile changes saved.')}catch(requestError){setError(requestError.message||'Profile could not be saved.')}finally{setSaving(false)}}
   return <><div className="page-heading"><div><div className="eyebrow">PREFERENCES</div><h1>Settings</h1><p>Personalize your Stockroom workspace.</p></div></div>
     <section className="panel settings-panel"><div><div className="settings-icon"><Sun size={17}/></div><div><strong>Appearance</strong><p>Choose the theme that feels right for you.</p></div></div><button className="theme-choice" onClick={toggleTheme}>{theme==='light'?<Sun size={16}/>:<Moon size={16}/>} {theme==='light'?'Light mode':'Dark mode'} <ChevronDown size={14}/></button></section>
